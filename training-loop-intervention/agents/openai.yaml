@@ -1,0 +1,4 @@
+interface:
+  display_name: "Training Loop Intervention"
+  short_description: "Modify train or eval loops without overbuilding"
+  default_prompt: "Use $training-loop-intervention to change research behavior in a train or eval loop with minimal abstraction."

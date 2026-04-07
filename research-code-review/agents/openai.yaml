@@ -1,0 +1,4 @@
+interface:
+  display_name: "Research Code Review"
+  short_description: "Review research code for paper-repo style drift"
+  default_prompt: "Use $research-code-review to review whether research code changes stayed minimal, readable, and faithful to the original repo."

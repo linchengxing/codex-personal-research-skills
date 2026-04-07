@@ -1,0 +1,4 @@
+interface:
+  display_name: "Research Repo Style"
+  short_description: "Keep research repo edits minimal and native"
+  default_prompt: "Use $research-repo-style to preserve paper-repo coding style while modifying an existing research codebase."

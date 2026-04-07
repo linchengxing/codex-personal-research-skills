@@ -1,0 +1,4 @@
+interface:
+  display_name: "Minimal Change Mapping"
+  short_description: "Map the smallest viable research edit surface"
+  default_prompt: "Use $minimal-change-mapping to shrink a research code change down to the smallest viable file set."

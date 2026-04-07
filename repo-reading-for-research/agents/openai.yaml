@@ -1,0 +1,4 @@
+interface:
+  display_name: "Repo Reading for Research"
+  short_description: "Read research repos for the shortest edit path"
+  default_prompt: "Use $repo-reading-for-research to find the shortest path through an unfamiliar research repo."

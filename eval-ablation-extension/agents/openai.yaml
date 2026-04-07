@@ -1,0 +1,4 @@
+interface:
+  display_name: "Eval and Ablation Extension"
+  short_description: "Extend paper-repo evaluation and ablation flows"
+  default_prompt: "Use $eval-ablation-extension to add evaluation or ablation support in a paper-repo style."

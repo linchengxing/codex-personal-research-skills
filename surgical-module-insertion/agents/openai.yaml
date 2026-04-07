@@ -1,0 +1,4 @@
+interface:
+  display_name: "Surgical Module Insertion"
+  short_description: "Insert a research module with minimal disruption"
+  default_prompt: "Use $surgical-module-insertion to add one research mechanism into an existing model path without refactoring the repo."
