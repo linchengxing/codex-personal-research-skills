@@ -89,6 +89,33 @@ Codex 在这台机器上的个人 skills 默认放在：
 
 要在另一台机器安装这套 skills，只需要把对应 skill 目录复制进去。
 
+### Conversational Install via Codex
+
+如果目标机器上的 Codex 已经带有系统 skill `$skill-installer`，那可以直接用对话式安装，不需要手动复制目录。
+
+例如，你可以直接对另一台 Codex 说：
+
+```text
+Use $skill-installer to install these skills from linchengxing/codex-personal-research-skills:
+research-repo-style
+repo-reading-for-research
+minimal-change-mapping
+surgical-module-insertion
+training-loop-intervention
+eval-ablation-extension
+research-code-review
+```
+
+或者更短一点：
+
+```text
+Use $skill-installer to install research-repo-style repo-reading-for-research minimal-change-mapping surgical-module-insertion training-loop-intervention eval-ablation-extension research-code-review from linchengxing/codex-personal-research-skills.
+```
+
+安装完成后，建议重启 Codex，让新 skills 被重新发现。
+
+这套仓库结构已经按 `skill-installer` 的 GitHub 安装方式验证过，可以直接按 repo path 安装。
+
 ### Recommended Repo Layout
 
 推荐你把下面这些目录和本 README 一起放到 GitHub 仓库里：
@@ -139,6 +166,22 @@ rsync -a \
 ```
 
 安装后建议新开一个 Codex 会话，让新 skill 的 metadata 被重新发现。
+
+### Direct Installer Script
+
+如果你想手动调用系统安装脚本，也可以在目标机器运行：
+
+```bash
+python3 ~/.codex/skills/.system/skill-installer/scripts/install-skill-from-github.py \
+  --repo linchengxing/codex-personal-research-skills \
+  --path research-repo-style repo-reading-for-research minimal-change-mapping surgical-module-insertion training-loop-intervention eval-ablation-extension research-code-review
+```
+
+这会把这些 skill 安装到：
+
+```bash
+~/.codex/skills
+```
 
 ## How To Use
 
