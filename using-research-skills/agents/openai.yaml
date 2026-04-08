@@ -1,0 +1,4 @@
+interface:
+  display_name: "Using Research Skills"
+  short_description: "Gate and route research coding tasks"
+  default_prompt: "Use $using-research-skills to check whether a research coding task is specified enough and route it to the right skill."

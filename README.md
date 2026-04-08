@@ -16,15 +16,19 @@
 
 ## Included Skills
 
-### 1. `research-repo-style`
+### 1. `using-research-skills`
+
+显式入口 skill。先检查信息是否足够；如果缺少会影响实现方向的关键信息，就先问用户；信息足够后，再路由到最合适的 research skill。
+
+### 2. `research-repo-style`
 
 总风格约束 skill。任何 research coding 任务都建议先用它，确保后续实现不会滑向过度工程化。
 
-### 2. `repo-reading-for-research`
+### 3. `repo-reading-for-research`
 
 用于快速读懂陌生 research repo，找出最短调用链、优先阅读文件和最可能的改动点。
 
-### 3. `minimal-change-mapping`
+### 4. `minimal-change-mapping`
 
 用于在真正写代码前，把改动面收缩到最小闭环，明确：
 
@@ -32,7 +36,7 @@
 - 哪些文件尽量别碰
 - 是否真的需要新文件
 
-### 4. `surgical-module-insertion`
+### 5. `surgical-module-insertion`
 
 用于往现有模型路径中插入一个研究机制，例如：
 
@@ -42,7 +46,7 @@
 - memory block
 - lightweight head
 
-### 5. `training-loop-intervention`
+### 6. `training-loop-intervention`
 
 用于修改训练或评测流程中的研究逻辑，例如：
 
@@ -52,11 +56,11 @@
 - distillation hook
 - cache / memory behavior
 
-### 6. `eval-ablation-extension`
+### 7. `eval-ablation-extension`
 
 用于补 benchmark、ablation、eval script、结果导出，保持论文 repo 常见的脚本风格。
 
-### 7. `research-code-review`
+### 8. `research-code-review`
 
 用于 code review，重点检查：
 
@@ -97,6 +101,7 @@ Codex 在这台机器上的个人 skills 默认放在：
 
 ```text
 Use $skill-installer to install these skills from linchengxing/codex-personal-research-skills:
+using-research-skills
 research-repo-style
 repo-reading-for-research
 minimal-change-mapping
@@ -109,7 +114,7 @@ research-code-review
 或者更短一点：
 
 ```text
-Use $skill-installer to install research-repo-style repo-reading-for-research minimal-change-mapping surgical-module-insertion training-loop-intervention eval-ablation-extension research-code-review from linchengxing/codex-personal-research-skills.
+Use $skill-installer to install using-research-skills research-repo-style repo-reading-for-research minimal-change-mapping surgical-module-insertion training-loop-intervention eval-ablation-extension research-code-review from linchengxing/codex-personal-research-skills.
 ```
 
 安装完成后，建议重启 Codex，让新 skills 被重新发现。
@@ -121,6 +126,7 @@ Use $skill-installer to install research-repo-style repo-reading-for-research mi
 推荐你把下面这些目录和本 README 一起放到 GitHub 仓库里：
 
 ```text
+using-research-skills/
 research-repo-style/
 repo-reading-for-research/
 minimal-change-mapping/
@@ -139,6 +145,7 @@ README.md
 mkdir -p ~/.codex/skills
 
 rsync -a \
+  using-research-skills \
   research-repo-style \
   repo-reading-for-research \
   minimal-change-mapping \
@@ -155,6 +162,7 @@ rsync -a \
 mkdir -p ~/.codex/skills
 
 rsync -a \
+  skills/using-research-skills \
   skills/research-repo-style \
   skills/repo-reading-for-research \
   skills/minimal-change-mapping \
@@ -174,7 +182,7 @@ rsync -a \
 ```bash
 python3 ~/.codex/skills/.system/skill-installer/scripts/install-skill-from-github.py \
   --repo linchengxing/codex-personal-research-skills \
-  --path research-repo-style repo-reading-for-research minimal-change-mapping surgical-module-insertion training-loop-intervention eval-ablation-extension research-code-review
+  --path using-research-skills research-repo-style repo-reading-for-research minimal-change-mapping surgical-module-insertion training-loop-intervention eval-ablation-extension research-code-review
 ```
 
 这会把这些 skill 安装到：
@@ -185,7 +193,13 @@ python3 ~/.codex/skills/.system/skill-installer/scripts/install-skill-from-githu
 
 ## How To Use
 
-最稳妥的方式是显式调用 skill 名称，例如：
+推荐先从入口 skill 开始：
+
+```text
+Use $using-research-skills to gate and route this research coding task. If any implementation detail is underspecified and would affect the direction, ask me before coding.
+```
+
+然后再按需要进入下游 skill。最稳妥的方式仍然是显式调用 skill 名称，例如：
 
 ```text
 Use $research-repo-style and $repo-reading-for-research to find the smallest edit path in this Video MLLM repo.
@@ -211,14 +225,16 @@ Use $research-code-review to review whether this diff introduced over-abstractio
 
 对于大多数 repo 改造任务，推荐这样用：
 
-1. `$research-repo-style`
-2. `$repo-reading-for-research`
-3. `$minimal-change-mapping`
+1. `$using-research-skills`
+2. `$research-repo-style`
+3. `$repo-reading-for-research` 或 `$minimal-change-mapping`
 4. 下面三者选一个：
    - `$surgical-module-insertion`
    - `$training-loop-intervention`
    - `$eval-ablation-extension`
 5. `$research-code-review`
+
+`using-research-skills` 不是替代其余 7 个 skills，而是负责先做门禁，再做最小必要分流。
 
 ## Important Behavior Guarantee
 
