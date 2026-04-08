@@ -191,6 +191,58 @@ python3 ~/.codex/skills/.system/skill-installer/scripts/install-skill-from-githu
 ~/.codex/skills
 ```
 
+## Update
+
+如果你已经安装过这套 skills，有两种更新方式。
+
+### Option 1: Reinstall via `skill-installer`
+
+重新执行一次安装命令即可：
+
+```text
+Use $skill-installer to install using-research-skills research-repo-style repo-reading-for-research minimal-change-mapping surgical-module-insertion training-loop-intervention eval-ablation-extension research-code-review from linchengxing/codex-personal-research-skills.
+```
+
+如果目标机器上的 `skill-installer` 实现为“目标目录已存在就中止”，那这一种方式可能不会直接覆盖旧版本。
+
+### Option 2: Pull and Sync
+
+如果你本地有这个仓库，更新方式更稳：
+
+```bash
+git pull
+
+rsync -a \
+  using-research-skills \
+  research-repo-style \
+  repo-reading-for-research \
+  minimal-change-mapping \
+  surgical-module-insertion \
+  training-loop-intervention \
+  eval-ablation-extension \
+  research-code-review \
+  ~/.codex/skills/
+```
+
+### If Reinstall Stops on Existing Directories
+
+先删除旧 skill 目录，再重新安装：
+
+```bash
+rm -rf ~/.codex/skills/using-research-skills
+rm -rf ~/.codex/skills/research-repo-style
+rm -rf ~/.codex/skills/repo-reading-for-research
+rm -rf ~/.codex/skills/minimal-change-mapping
+rm -rf ~/.codex/skills/surgical-module-insertion
+rm -rf ~/.codex/skills/training-loop-intervention
+rm -rf ~/.codex/skills/eval-ablation-extension
+rm -rf ~/.codex/skills/research-code-review
+```
+
+然后再运行安装命令。
+
+无论使用哪种方式，更新完成后都建议重启 Codex，让新的 skill metadata 被重新发现。
+
 ## How To Use
 
 推荐先从入口 skill 开始：
