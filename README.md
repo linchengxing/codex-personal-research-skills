@@ -1,232 +1,127 @@
-# Personal Research Skills for Codex
+# Research Module Implementation for Codex
 
-一套面向 research coding 的个人 Codex skills，主要服务于以下场景：
+这个仓库现在只暴露一个公开 skill：
 
-- 修改已有论文 repo，而不是从零搭工程框架
-- MLLM、3D point cloud、Embodied AI 等研究代码的快速读懂与最小侵入式改造
-- 保持代码像论文仓库，而不是被“工程化重构”
+- `research-module-implementation`
 
-这套 skills 的核心目标不是“把 repo 变得更现代”，而是让 Codex 更像一个懂 research repo 的合作者：
+它面向通用 deep learning research coding，不绑定任何具体研究方向。
+
+目标很明确：
 
 - 先读 repo，再决定改哪里
-- 优先最小改动面
-- 核心逻辑尽量集中在少数关键文件
-- 少 wrapper、少 manager、少无意义跳转
-- 遇到 idea 中没写清、但会影响实现方向的内容，必须先问用户，不能自己补设定
+- 把改动面压到最小
+- 保持代码像论文 repo，而不是被工程化改造
+- 只要有任何会影响实现方向的细节没写清，就先问用户，再继续实现
 
-## Included Skills
+## Public Skill
 
-### 1. `using-research-skills`
+### `research-module-implementation`
 
-显式入口 skill。先检查信息是否足够；如果缺少会影响实现方向的关键信息，就先问用户；信息足够后，再路由到最合适的 research skill。
+这个 skill 把原来几类最常用能力合并成一个内部流程：
 
-### 2. `research-repo-style`
+1. 读 repo，找最短调用路径
+2. 缩改动面，明确哪些文件必须改、哪些不要碰
+3. 做实现前门禁，检查是否有关键细节缺失
+4. 在最小改动下把一个研究模块或机制接进现有代码路径
 
-总风格约束 skill。任何 research coding 任务都建议先用它，确保后续实现不会滑向过度工程化。
+它适合的任务包括：
 
-### 3. `repo-reading-for-research`
+- 往现有模型里插一个模块
+- 增加 router、selector、adapter、head、memory block
+- 在不重构 repo 的前提下实现一个新机制
+- 根据 `idea.md` 或方法描述落地 v1 代码
 
-用于快速读懂陌生 research repo，找出最短调用链、优先阅读文件和最可能的改动点。
+它不做的事情：
 
-### 4. `minimal-change-mapping`
+- 全套 ablation / eval 平台化
+- 通用 code review 流程
+- 脱离实现任务的 brainstorming
 
-用于在真正写代码前，把改动面收缩到最小闭环，明确：
+## Behavior Guarantee
 
-- 哪些文件必须改
-- 哪些文件尽量别碰
-- 是否真的需要新文件
+这个 skill 明确要求：
 
-### 5. `surgical-module-insertion`
+- 不默认新建 `utils.py`、`helpers.py`、`manager.py`、`wrapper.py`
+- 不为了“更优雅”把核心逻辑拆成很多层
+- 不做与当前研究改动无关的重构
+- 不假设具体应用领域
+- 不自动补全 idea 里没写清的关键方法细节
 
-用于往现有模型路径中插入一个研究机制，例如：
+下面这条是硬约束，不是建议：
 
-- token pruning
-- router
-- adapter
-- memory block
-- lightweight head
+如果有任何不确定内容会影响实现方向，Codex 必须先问你，不能自己补。
 
-### 6. `training-loop-intervention`
+典型会触发停下确认的情况包括：
 
-用于修改训练或评测流程中的研究逻辑，例如：
+- 模块插入点不明确
+- 路由或打分规则没定义
+- 训练时和推理时是否一致不明确
+- shared branch 还是 separate branch 不明确
+- 改旧文件还是拆新文件会明显改变实现结构
 
-- loss
-- sampling
-- token budget
-- distillation hook
-- cache / memory behavior
-
-### 7. `eval-ablation-extension`
-
-用于补 benchmark、ablation、eval script、结果导出，保持论文 repo 常见的脚本风格。
-
-### 8. `research-code-review`
-
-用于 code review，重点检查：
-
-- 真 bug / regression
-- 逻辑是否被打散
-- 是否引入了不必要的新抽象
-- 是否破坏了原 repo 的论文味
-
-## Design Principles
-
-这套 skills 共享以下原则：
-
-1. Preserve the repo, don't engineer it into a framework.
-2. Read first, cut second, write last.
-3. Prefer editing existing files over adding abstraction layers.
-4. Keep core research logic locally visible.
-5. If the idea is underspecified in a way that affects implementation, ask the user before continuing.
-
-第 5 条非常重要：
-
-如果 idea 里没有明确说明某个关键细节，而这个细节会影响实现方向、训练行为、数据流、loss、eval scope、ablation axis 或论文 claim，那么 Codex 必须停下来问你，而不是自己补全。
+如果存在两个以上合理实现分支，也必须先把分支列出来问你，不能静默拍板。
 
 ## Install
 
-Codex 在这台机器上的个人 skills 默认放在：
+Codex 的个人 skills 默认放在：
 
 ```bash
 ~/.codex/skills
 ```
 
-要在另一台机器安装这套 skills，只需要把对应 skill 目录复制进去。
-
 ### Conversational Install via Codex
 
-如果目标机器上的 Codex 已经带有系统 skill `$skill-installer`，那可以直接用对话式安装，不需要手动复制目录。
-
-例如，你可以直接对另一台 Codex 说：
+如果目标机器上的 Codex 带有系统 skill `$skill-installer`，直接说：
 
 ```text
-Use $skill-installer to install these skills from linchengxing/codex-personal-research-skills:
-using-research-skills
-research-repo-style
-repo-reading-for-research
-minimal-change-mapping
-surgical-module-insertion
-training-loop-intervention
-eval-ablation-extension
-research-code-review
+Use $skill-installer to install research-module-implementation from linchengxing/codex-personal-research-skills.
 ```
 
-或者更短一点：
-
-```text
-Use $skill-installer to install using-research-skills research-repo-style repo-reading-for-research minimal-change-mapping surgical-module-insertion training-loop-intervention eval-ablation-extension research-code-review from linchengxing/codex-personal-research-skills.
-```
-
-安装完成后，建议重启 Codex，让新 skills 被重新发现。
-
-这套仓库结构已经按 `skill-installer` 的 GitHub 安装方式验证过，可以直接按 repo path 安装。
-
-### Recommended Repo Layout
-
-推荐你把下面这些目录和本 README 一起放到 GitHub 仓库里：
-
-```text
-using-research-skills/
-research-repo-style/
-repo-reading-for-research/
-minimal-change-mapping/
-surgical-module-insertion/
-training-loop-intervention/
-eval-ablation-extension/
-research-code-review/
-README.md
-```
+安装完成后，建议重启 Codex，让新 skill 被重新发现。
 
 ### Copy Into Codex
 
-如果这些 skill 目录和 `README.md` 在同一个仓库根目录下，可以在目标机器执行：
+如果你是手动同步，在仓库根目录执行：
 
 ```bash
 mkdir -p ~/.codex/skills
 
 rsync -a \
-  using-research-skills \
-  research-repo-style \
-  repo-reading-for-research \
-  minimal-change-mapping \
-  surgical-module-insertion \
-  training-loop-intervention \
-  eval-ablation-extension \
-  research-code-review \
+  research-module-implementation \
   ~/.codex/skills/
 ```
-
-如果你把这些 skill 放在仓库里的 `skills/` 子目录下，只需要把命令改成：
-
-```bash
-mkdir -p ~/.codex/skills
-
-rsync -a \
-  skills/using-research-skills \
-  skills/research-repo-style \
-  skills/repo-reading-for-research \
-  skills/minimal-change-mapping \
-  skills/surgical-module-insertion \
-  skills/training-loop-intervention \
-  skills/eval-ablation-extension \
-  skills/research-code-review \
-  ~/.codex/skills/
-```
-
-安装后建议新开一个 Codex 会话，让新 skill 的 metadata 被重新发现。
 
 ### Direct Installer Script
 
-如果你想手动调用系统安装脚本，也可以在目标机器运行：
+如果你想手动调用系统安装脚本：
 
 ```bash
 python3 ~/.codex/skills/.system/skill-installer/scripts/install-skill-from-github.py \
   --repo linchengxing/codex-personal-research-skills \
-  --path using-research-skills research-repo-style repo-reading-for-research minimal-change-mapping surgical-module-insertion training-loop-intervention eval-ablation-extension research-code-review
-```
-
-这会把这些 skill 安装到：
-
-```bash
-~/.codex/skills
+  --path research-module-implementation
 ```
 
 ## Update
 
-如果你已经安装过这套 skills，有两种更新方式。
-
 ### Option 1: Reinstall via `skill-installer`
 
-重新执行一次安装命令即可：
-
 ```text
-Use $skill-installer to install using-research-skills research-repo-style repo-reading-for-research minimal-change-mapping surgical-module-insertion training-loop-intervention eval-ablation-extension research-code-review from linchengxing/codex-personal-research-skills.
+Use $skill-installer to install research-module-implementation from linchengxing/codex-personal-research-skills.
 ```
 
-如果目标机器上的 `skill-installer` 实现为“目标目录已存在就中止”，那这一种方式可能不会直接覆盖旧版本。
-
 ### Option 2: Pull and Sync
-
-如果你本地有这个仓库，更新方式更稳：
 
 ```bash
 git pull
 
 rsync -a \
-  using-research-skills \
-  research-repo-style \
-  repo-reading-for-research \
-  minimal-change-mapping \
-  surgical-module-insertion \
-  training-loop-intervention \
-  eval-ablation-extension \
-  research-code-review \
+  research-module-implementation \
   ~/.codex/skills/
 ```
 
-### If Reinstall Stops on Existing Directories
+### If You Installed the Old Multi-Skill Version
 
-先删除旧 skill 目录，再重新安装：
+旧版本如果装过这些目录，建议先删掉：
 
 ```bash
 rm -rf ~/.codex/skills/using-research-skills
@@ -239,91 +134,47 @@ rm -rf ~/.codex/skills/eval-ablation-extension
 rm -rf ~/.codex/skills/research-code-review
 ```
 
-然后再运行安装命令。
-
-无论使用哪种方式，更新完成后都建议重启 Codex，让新的 skill metadata 被重新发现。
+然后安装新的单 skill 版本。
 
 ## How To Use
 
-推荐先从入口 skill 开始：
+最稳妥的方式是显式调用：
 
 ```text
-Use $using-research-skills to gate and route this research coding task. If any implementation detail is underspecified and would affect the direction, ask me before coding.
+Use $research-module-implementation to read this repo, find the smallest valid edit surface, and implement this module. If any missing detail would affect the implementation, ask me before coding.
 ```
 
-然后再按需要进入下游 skill。最稳妥的方式仍然是显式调用 skill 名称，例如：
+如果你已经有 `idea.md`，可以直接这样说：
 
 ```text
-Use $research-repo-style and $repo-reading-for-research to find the smallest edit path in this Video MLLM repo.
+Read my idea.md first. Use $research-module-implementation to turn it into a v1 implementation path and code it in this repo. If any detail is underspecified and changes the implementation direction, stop and ask me before coding.
 ```
+
+如果你想强调不要工程化，可以这样说：
 
 ```text
-Use $minimal-change-mapping and $surgical-module-insertion to add a query-aware token pruning module, but do not refactor the repo.
+Use $research-module-implementation to add this mechanism, keep the repo style intact, keep the change surface small, and do not introduce wrappers or helper layers. Ask me before deciding any unspecified detail.
 ```
+
+## Install-Facing Layout
+
+对安装真正重要的是下面这部分：
 
 ```text
-Use $training-loop-intervention to modify the token budget logic in the current training loop. If any design detail is unclear, ask me before implementing.
+research-module-implementation/
+README.md
 ```
-
-```text
-Use $eval-ablation-extension to add only the minimum ablations needed for the paper claim.
-```
-
-```text
-Use $research-code-review to review whether this diff introduced over-abstraction or spread the logic too far.
-```
-
-## Recommended Workflow
-
-对于大多数 repo 改造任务，推荐这样用：
-
-1. `$using-research-skills`
-2. `$research-repo-style`
-3. `$repo-reading-for-research` 或 `$minimal-change-mapping`
-4. 下面三者选一个：
-   - `$surgical-module-insertion`
-   - `$training-loop-intervention`
-   - `$eval-ablation-extension`
-5. `$research-code-review`
-
-`using-research-skills` 不是替代其余 7 个 skills，而是负责先做门禁，再做最小必要分流。
-
-## Important Behavior Guarantee
-
-这套 skills 明确要求：
-
-- 不要默认新建 `utils.py` / `helpers.py` / `manager.py`
-- 不要为了“优雅”把核心逻辑拆成很多层
-- 不要顺手做与当前 research 改动无关的重构
-- 不要自动补全 idea 里没有写明的关键方法细节
-- 只要不确定内容会影响实现方向，就必须先和用户交流
-
-如果你希望 Codex 更像“懂论文 repo 的研究搭子”，而不是“总想接管代码库的工程助手”，这套 skills 就是为这个目标设计的。
-
-## Files That Matter
-
-每个 skill 目录至少包含：
-
-- `SKILL.md`
-- `agents/openai.yaml`
 
 其中：
 
-- `SKILL.md` 是真正的 skill 内容
-- `agents/openai.yaml` 是 Codex UI / metadata 兼容文件
-
-`research-repo-style` 额外带了几个共享 reference：
-
-- `references/repo-archetypes.md`
-- `references/anti-patterns.md`
-- `references/output-templates.md`
+- `research-module-implementation/SKILL.md` 是核心行为定义
+- `research-module-implementation/agents/openai.yaml` 是 Codex metadata
+- `research-module-implementation/references/` 放最小必要参考材料
 
 ## Local Source Note
 
-当前这套 skills 在本机的实际工作副本位于：
+如果你在本机开发和测试，这个 skill 的安装目标仍然是：
 
 ```bash
 ~/.codex/skills
 ```
-
-如果你要把它们同步到 GitHub 并在其他机器复用，建议把上面列出的 7 个 skill 目录完整纳入仓库，然后按本 README 的安装方式同步到新的机器。

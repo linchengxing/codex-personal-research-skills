@@ -34,18 +34,18 @@ Smell:
 Lighter move:
 Refactor only the local section that blocks the method.
 
-## 5. Platformizing Eval
+## 5. Pretty But Harder To Read
 
 Smell:
-A few ablations turn into a new experiment manager, sweep engine, or result database.
-
-Lighter move:
-Use direct scripts and obvious filenames until repeated pain proves a platform is necessary.
-
-## 6. Pretty But Harder To Read
-
-Smell:
-The diff looks more elegant to engineers but makes the paper contribution harder to find.
+The diff looks more elegant to engineers but makes the research contribution harder to find.
 
 Lighter move:
 Prefer local visibility over abstraction purity.
+
+## 6. Silent Method Completion
+
+Smell:
+The code quietly picks a routing rule, mask policy, branch split, or training behavior that the idea never specified.
+
+Lighter move:
+Stop and ask the user before fixing the design in code.

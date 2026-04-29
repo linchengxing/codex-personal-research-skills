@@ -1,0 +1,4 @@
+interface:
+  display_name: "Research Module Implementation"
+  short_description: "Read, gate, and implement one research module with minimal disruption"
+  default_prompt: "Use $research-module-implementation to read this repo, find the smallest valid edit surface, and implement one research mechanism. If any missing detail would affect the implementation, ask me before coding."

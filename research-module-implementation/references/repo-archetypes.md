@@ -23,19 +23,19 @@ Do not fight:
 - direct imports
 - script-heavy workflows
 
-## 2. HF or MLLM Repo
+## 2. HF-Style Repo
 
 Typical signs:
 
 - `modeling_*.py`
 - `configuration_*.py`
 - `train*.py`
-- `transformers`, `accelerate`, or `deepspeed`
+- `transformers`, `accelerate`, or similar libraries
 
 How to work:
 
-- find the actual forward path before touching config
-- keep new method logic near the model path, not in launch code
+- find the real forward path before touching config
+- keep new logic near the model path, not in launch code
 - keep config exposure minimal
 
 Do not fight:
@@ -44,7 +44,7 @@ Do not fight:
 - the repo's current builder style
 - launch scripts that already work
 
-## 3. MM-Style or Registry-Heavy Repo
+## 3. Registry-Heavy Repo
 
 Typical signs:
 
@@ -64,22 +64,22 @@ Do not fight:
 - the registry itself
 - the config entry pattern
 
-## 4. 3D or Embodied Hybrid Repo
+## 4. Hybrid or Custom-Op Repo
 
 Typical signs:
 
-- data preprocessing scripts
-- simulator or environment wrappers
-- CUDA ops or custom extensions
+- preprocessing scripts
+- custom CUDA ops or compiled extensions
 - separate train and eval stacks
+- brittle environment setup
 
 How to work:
 
-- identify whether the real bottleneck is model code, data prep, or environment rollout
-- avoid touching environment or preprocessing code unless the method truly depends on it
+- identify whether the real bottleneck is model code, data prep, or the outer loop
+- avoid touching expensive or brittle subsystems unless the method truly depends on them
 - verify with the cheapest honest run because full loops may be expensive
 
 Do not fight:
 
-- brittle environment setup
-- custom ops that are unrelated to the method change
+- unrelated custom ops
+- unrelated environment setup
